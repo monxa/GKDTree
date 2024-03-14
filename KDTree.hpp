@@ -16,6 +16,8 @@
 #include <memory>
 #include <vector>
 
+#include <godot_cpp/core/defs.hpp> // for exporting symbols (KDTree)
+
 using point_t = std::vector< double >;
 using indexArr = std::vector< size_t >;
 using pointIndex = typename std::pair< std::vector< double >, size_t >;
@@ -76,7 +78,7 @@ inline void sort_on_idx(const pointIndexArr::iterator &,  //
 
 using pointVec = std::vector< point_t >;
 
-class KDTree {
+class GDE_EXPORT KDTree {
     KDNodePtr root;
     KDNodePtr leaf;
 
