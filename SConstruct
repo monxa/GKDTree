@@ -27,7 +27,7 @@ def recursive_glob(sourcedir, suffix):
 env.Append(CPPPATH=["src"])
 env.Append(CFLAGS=['-g', '-pg'])
 env["symbols_visibility"] = "visible"
-sources = ["KDTree.cpp", "GKDTree.cpp"]
+sources = ["KDTree.cpp", "GKDTree.cpp", "GKDTree_binder.cpp"]
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(
@@ -38,7 +38,7 @@ if env["platform"] == "macos":
     )
 else:
     library = env.SharedLibrary(
-        "../../bin/libgkdtree{}{}".format(env["suffix"], env["SHLIBSUFFIX"]),
+        "../../bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
         source=sources,
     )
 

@@ -1,6 +1,7 @@
 #include "GKDTree.hpp"
 #include <gdextension_interface.h>
 #include <godot_cpp/godot.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 godot::Variant GKDTree::nearestPoint(godot::Variant point) {
 	point_t pt = extract_point(point);

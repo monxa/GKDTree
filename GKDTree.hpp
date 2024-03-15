@@ -1,14 +1,15 @@
 #pragma once
-#include "KDTree.hpp"
 #include <godot_cpp/classes/ref_counted.hpp>
 #include <godot_cpp/godot.hpp>
+
+#include "KDTree.hpp"
 
 class GKDTree : public godot::RefCounted {
 	GDCLASS(GKDTree, godot::RefCounted)
 
 public:
     GKDTree() = default;
-	void initialize(godot::Array points) {
+	GDE_EXPORT void initialize(godot::Array points) {
 		if (points.size() == 0)
 			return;
 		pointVec point_vec;
