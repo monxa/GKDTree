@@ -4,12 +4,12 @@
 
 #include "KDTree.hpp"
 
-class GKDTree : public godot::RefCounted {
+class GDE_EXPORT GKDTree : public godot::RefCounted {
 	GDCLASS(GKDTree, godot::RefCounted)
 
 public:
     GKDTree() = default;
-	GDE_EXPORT void initialize(godot::Array points) {
+	void initialize(godot::Array points) {
 		if (points.size() == 0)
 			return;
 		pointVec point_vec;
@@ -21,11 +21,13 @@ public:
 	}
 
     godot::Variant nearestPoint(godot::Variant point);
-    GDE_EXPORT godot::Array neighborhood(godot::Variant point, float rad) const;
+    godot::Array neighborhood(godot::Variant point, float rad) const;
+	int nearestPointIndex(godot::Variant point);
+	godot::PackedInt32Array neighborhoodIndices(godot::Variant point, float rad);
 	
 private:
 	mutable KDTree tree;
-    GDE_EXPORT point_t extract_point(godot::Variant p) const;
+    point_t extract_point(godot::Variant p) const;
 protected:
 	static void _bind_methods();
 };

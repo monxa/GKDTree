@@ -28,6 +28,21 @@ godot::Array GKDTree::neighborhood(godot::Variant point, float rad) const{
 	return arr;
 }
 
+int GKDTree::nearestPointIndex(godot::Variant point) {
+	point_t pt = extract_point(point);
+	return tree.nearest_index(pt);
+}
+
+godot::PackedInt32Array GKDTree::neighborhoodIndices(godot::Variant point, float rad) {
+	point_t pt = extract_point(point);
+	indexArr vec = tree.neighborhood_indices(pt, rad);
+	godot::PackedInt32Array arr;
+	for (auto index : vec){
+		arr.push_back(index);
+	}
+	return arr;
+}
+
 point_t GKDTree::extract_point(godot::Variant p) const{
 	point_t result;
 	if (p.get_type() == godot::Variant::VECTOR2) {
@@ -47,7 +62,9 @@ point_t GKDTree::extract_point(godot::Variant p) const{
 
 using namespace godot;
 void GKDTree::_bind_methods() {
-	ClassDB::bind_method(D_METHOD("nearest_point", "point"), &GKDTree::nearestPoint);
 	ClassDB::bind_method(D_METHOD("initialize", "points"), &GKDTree::initialize);
+	ClassDB::bind_method(D_METHOD("nearest_point", "point"), &GKDTree::nearestPoint);
 	ClassDB::bind_method(D_METHOD("neighborhood", "point", "rad"), &GKDTree::neighborhood);
+	ClassDB::bind_method(D_METHOD("nearest_point_index", "point"), &GKDTree::nearestPointIndex);
+	ClassDB::bind_method(D_METHOD("neighborhood_indices", "point", "rad"), &GKDTree::neighborhoodIndices);
 }
