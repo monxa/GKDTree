@@ -20,14 +20,14 @@ public:
 		tree = KDTree(point_vec);
 	}
 
-    godot::Variant nearestPoint(godot::Variant point);
-    godot::Array neighborhood(godot::Variant point, float rad) const;
-	int nearestPointIndex(godot::Variant point);
-	godot::PackedInt32Array neighborhoodIndices(godot::Variant point, float rad);
+    godot::Variant nearestPoint(const godot::Variant &point);
+    godot::Array neighborhood(const godot::Variant& point, float rad) const;
+	int nearestPointIndex(const godot::Variant &point);
+	godot::PackedInt32Array neighborhoodIndices(const godot::Variant& point, float rad);
 	
 private:
 	mutable KDTree tree;
-    point_t extract_point(godot::Variant p) const;
+    point_t extract_point(const godot::Variant& p) const;
 protected:
 	static void _bind_methods();
 };
