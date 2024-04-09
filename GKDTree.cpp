@@ -3,7 +3,7 @@
 #include <godot_cpp/godot.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
-godot::Variant GKDTree::nearestPoint(godot::Variant point) {
+godot::Variant GKDTree::nearestPoint(const godot::Variant &point) {
 	point_t pt = extract_point(point);
 	point_t res = tree.nearest_point(pt);
 
@@ -20,14 +20,21 @@ godot::Variant GKDTree::nearestPoint(godot::Variant point) {
 godot::Array GKDTree::neighborhood(const godot::Variant &point, float rad) const {
 	point_t pt = extract_point(point);
 	pointVec vec = tree.neighborhood_points(pt, rad);
-	godot::Array arr;
-	for (point_t p : vec) {
-		if (p.size() == 2)
-			arr.push_back(godot::Vector2(p[0], p[1]));
-		if (p.size() == 3)
-			arr.push_back(godot::Vector3(p[0], p[1], p[2]));
+	if (vec.size() == 0)
+		return godot::Array();
+
+	godot::Array result;
+	result.resize(vec.size());
+	int vector_type = vec[0].size();
+	if (vector_type == 2) {
+		for (int i = 0; i < vec.size(); i++)
+			result[i] = godot::Vector2(vec[i][0], vec[i][1]);
 	}
-	return arr;
+	if (vector_type == 3) {
+		for (int i = 0; i < vec.size(); i++)
+			result[i] = godot::Vector3(vec[i][0], vec[i][1], vec[i][2]);
+	}
+	return result;
 }
 
 int GKDTree::nearestPointIndex(const godot::Variant &point) {
@@ -39,8 +46,9 @@ godot::PackedInt32Array GKDTree::neighborhoodIndices(const godot::Variant &point
 	point_t pt = extract_point(point);
 	indexArr vec = tree.neighborhood_indices(pt, rad);
 	godot::PackedInt32Array arr;
-	for (auto index : vec) {
-		arr.push_back(index);
+	arr.resize(vec.size());
+	for (int i = 0; i < vec.size(); i++) {
+		arr[i] = vec[i];
 	}
 	return arr;
 }
