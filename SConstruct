@@ -5,7 +5,7 @@ import sys
 try:
     Import('env')
 except:
-    env = SConscript("/opt/godot-cpp/SConstruct").Clone()
+    env = SConscript("godot-cpp/SConstruct").Clone()
 
 
 # For reference:
@@ -38,7 +38,7 @@ if env["platform"] == "macos":
     )
 else:
     library = env.SharedLibrary(
-        "../../bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
+        "bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
         source=sources,
     )
 
