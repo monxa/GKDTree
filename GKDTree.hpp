@@ -9,7 +9,7 @@ class GDE_EXPORT GKDTree : public godot::RefCounted {
 
 public:
 	GKDTree() = default;
-	void initialize(const godot::Array &points) {
+	void initialize(godot::Array points) {
 		if (points.size() == 0)
 			return;
 		pointVec point_vec;
