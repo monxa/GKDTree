@@ -18,17 +18,21 @@ public:
 			point_vec.push_back(extract_point(point));
 		}
 		tree = KDTree(point_vec);
+		size = points.size();
 	}
 
 	godot::Variant nearestPoint(const godot::Variant &point);
 	godot::Array neighborhood(const godot::Variant &point, float rad) const;
 	int nearestPointIndex(const godot::Variant &point);
 	godot::PackedInt32Array neighborhoodIndices(const godot::Variant &point, float rad);
+	int get_size(){
+		return size;
+	}
 
 private:
 	mutable KDTree tree;
 	point_t extract_point(const godot::Variant &p) const;
-
+	int size = 0;
 protected:
 	static void _bind_methods();
 };

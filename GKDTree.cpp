@@ -4,9 +4,9 @@
 #include <godot_cpp/variant/utility_functions.hpp>
 
 godot::Variant GKDTree::nearestPoint(const godot::Variant &point) {
+	if (size == 0) return nullptr;
 	point_t pt = extract_point(point);
 	point_t res = tree.nearest_point(pt);
-
 	if (res.size() == 2) {
 		return godot::Vector2(res[0], res[1]);
 	}
@@ -18,10 +18,9 @@ godot::Variant GKDTree::nearestPoint(const godot::Variant &point) {
 }
 
 godot::Array GKDTree::neighborhood(const godot::Variant &point, float rad) const {
+	if (size == 0) return godot::Array();
 	point_t pt = extract_point(point);
 	pointVec vec = tree.neighborhood_points(pt, rad);
-	if (vec.size() == 0)
-		return godot::Array();
 
 	godot::Array result;
 	result.resize(vec.size());
@@ -43,6 +42,7 @@ int GKDTree::nearestPointIndex(const godot::Variant &point) {
 }
 
 godot::PackedInt32Array GKDTree::neighborhoodIndices(const godot::Variant &point, float rad) {
+	if (size == 0) return godot::PackedInt32Array();
 	point_t pt = extract_point(point);
 	indexArr vec = tree.neighborhood_indices(pt, rad);
 	godot::PackedInt32Array arr;
@@ -50,6 +50,7 @@ godot::PackedInt32Array GKDTree::neighborhoodIndices(const godot::Variant &point
 	for (int i = 0; i < vec.size(); i++) {
 		arr[i] = vec[i];
 	}
+	if (size == 0) return godot::PackedInt32Array();
 	return arr;
 }
 
@@ -77,4 +78,5 @@ void GKDTree::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("neighborhood", "point", "rad"), &GKDTree::neighborhood);
 	ClassDB::bind_method(D_METHOD("nearest_point_index", "point"), &GKDTree::nearestPointIndex);
 	ClassDB::bind_method(D_METHOD("neighborhood_indices", "point", "rad"), &GKDTree::neighborhoodIndices);
+	ClassDB::bind_method(D_METHOD("size"), &GKDTree::get_size);
 }
