@@ -3,9 +3,8 @@
 GKDTree is a godot-cpp compatible wrapper for a KDTree implementation as provided by @walaj and @crvs.
 
 ## Features
-- **Versatile Data Handling**: GKDTree is designed to work with Godot's dynamic data types, accepting both `godot::PackedVector2Array` and `godot::PackedVector3Array` through `godot::Variant` and `godot::Array` parameters. This makes it flexible and easy to use within the Godot environment.
+- **Versatile Data Handling**: GKDTree is designed to work with Godot's dynamic data types, accepting `Vector2`, `Vector3`, `Array`, `godot::PackedVector2Array` and `godot::PackedVector3Array` through `godot::Variant` and `godot::Array` parameters. This makes it flexible and easy to use within the Godot environment.
 - **Nearest Point and Neighborhood Queries**: With methods for finding the nearest point and querying neighborhoods, GKDTree allows for efficient spatial queries.
-- **Optimized for Godot-cpp**: Specifically optimized for use with godot-cpp.
 
 
 # KDTree
