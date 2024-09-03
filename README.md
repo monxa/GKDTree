@@ -1,4 +1,4 @@
-# GKDTree - A KDTree Extension for Godot Engine
+# GKDTree - A KDTree Extension for Godot 4
 
 GKDTree is a godot-cpp compatible wrapper for a KDTree implementation as provided by @walaj and @crvs.
 
