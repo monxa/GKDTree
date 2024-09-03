@@ -1,0 +1,39 @@
+[gd_scene load_steps=2 format=3 uid="uid://b46nj5ge8psn3"]
+
+[ext_resource type="Script" path="res://test.gd" id="1_qe177"]
+
+[node name="Test" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qe177")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ButtonInitialize" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Initialize"
+
+[node name="ButtonNearestPoint" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Closest Point"
+
+[node name="ButtonNeighborhood" type="Button" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Neighborhood"
+
+[connection signal="pressed" from="HBoxContainer/ButtonInitialize" to="." method="_on_button_initialize_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonNearestPoint" to="." method="_on_button_nearest_point_pressed"]
+[connection signal="pressed" from="HBoxContainer/ButtonNeighborhood" to="." method="_on_button_neighborhood_pressed"]

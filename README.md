@@ -7,7 +7,7 @@ GKDTree is a godot-cpp compatible wrapper for a KDTree implementation as provide
 - **Nearest Point and Neighborhood Queries**: With methods for finding the nearest point and querying neighborhoods, GKDTree allows for efficient spatial queries.
 
 ## Setup
-1. Clone into `<YourProject>/addons`.
+1. Clone GKDTree somewhere 
 2.  navigate into GKDTree directory.
 3. For godot-cpp:
 ```console
@@ -18,6 +18,7 @@ git submodule update
 ```console
 scons
 ```
+5. Copy godot\_project/addons/gkdtree into your project.
 
 I don't provide binaries yet. But this should not be harder than to compile godot. In fact, the process is identical.
 

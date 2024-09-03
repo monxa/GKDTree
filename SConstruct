@@ -38,7 +38,7 @@ if env["platform"] == "macos":
     )
 else:
     library = env.SharedLibrary(
-        "bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
+        "godot_project/addons/gkdtree/bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
         source=sources,
     )
 
