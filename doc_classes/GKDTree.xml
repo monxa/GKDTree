@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<class name="GKDTree" inherits="RefCounted" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/godotengine/godot/master/doc/class.xsd">
+    <brief_description>
+    A k-d tree implementation for efficient spatial searching.
+    </brief_description>
+    <description>
+    GKDTree is a space-partitioning data structure for organizing points in a k-dimensional space. It allows for efficient nearest neighbor searches and range queries.
+    </description>
+    <tutorials>
+    </tutorials>
+    <methods>
+        <method name="initialize">
+            <return type="void" />
+            <param index="0" name="points" type="Array" />
+            <description>
+            Initializes the [GKDTree] with given [param points].
+            [param points] can be any of the following: [PackedVector2Array], [PackedVector3Array], [Array]. If [param points] is an Array, all points must be either Vector2 or Vector3.
+            This should be called as infrequently as possible to profit from the performance characteristics of spatial data structures.
+            The [param points] passed here will be used in subsequent method calls for spatial queries.
+            </description>
+        </method>
+        <method name="nearest_point">
+            <return type="Variant" />
+            <param index="0" name="point" type="Variant" />
+            <description>
+            Finds the closest point to [param point] in the set of points passed to [method initialize].
+            [param point] is the reference point to search from. Accepted types: [Vector2], [Vector3].
+            Returns a point of the same type as those in the initialized point set.
+            </description>
+        </method>
+        <method name="nearest_point_index">
+            <return type="int" />
+            <param index="0" name="point" type="Variant" />
+            <description>
+            Finds the index of the closest point to [param point] in the set of points passed to [method initialize].
+            [param point] is the reference point to search from. Accepted types: [Vector2], [Vector3].
+            Returns the index corresponding to the position of the nearest point in the original [param points] array passed to [method initialize].
+            </description>
+        </method>
+        <method name="neighborhood" qualifiers="const">
+            <return type="Array" />
+            <param index="0" name="point" type="Variant" />
+            <param index="1" name="rad" type="float" />
+            <description>
+            Returns all points within range [param rad] of [param point] from the set of points passed to [method initialize].
+            [param point] is the reference point to search from. Accepted types: [Vector2], [Vector3].
+            [param rad] is the search radius around [param point].
+            The returned array contains points of the same type as those in the initialized point set.
+            </description>
+        </method>
+        <method name="neighborhood_indices">
+            <return type="PackedInt32Array" />
+            <param index="0" name="point" type="Variant" />
+            <param index="1" name="rad" type="float" />
+            <description>
+            Returns indices of points within range [param rad] of [param point] from the set of points passed to [method initialize].
+            [param point] is the reference point to search from. Accepted types: [Vector2], [Vector3].
+            [param rad] is the search radius around [param point].
+            The returned array contains indices corresponding to the positions of the found points in the original [param points] array passed to [method initialize].
+            </description>
+        </method>
+        <method name="size">
+            <return type="int" />
+            <description>
+            Returns the number of points in the currently initialized set (i.e., the size of the [param points] array last passed to [method initialize]).
+            </description>
+        </method>
+    </methods>
+</class>

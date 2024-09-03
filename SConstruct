@@ -29,6 +29,9 @@ env.Append(CFLAGS=['-g', '-pg'])
 env["symbols_visibility"] = "visible"
 sources = ["KDTree.cpp", "GKDTree.cpp", "GKDTree_binder.cpp"]
 
+doc_data = env.GodotCPPDocData("godot-cpp/src/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml"))
+sources.append(doc_data)
+
 if env["platform"] == "macos":
     library = env.SharedLibrary(
         "libgkdtree.{}.{}.framework/libgkdtree.{}.{}".format(
@@ -41,5 +44,6 @@ else:
         "godot_project/addons/gkdtree/bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
         source=sources,
     )
+
 
 Default(library)
