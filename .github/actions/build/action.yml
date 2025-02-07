@@ -1,0 +1,111 @@
+name: "Build Action"
+description: "A composite action to build the project using SCons internal caching, and optionally zip the addons directory."
+inputs:
+  build_platform:
+    description: "The target platform for the build (e.g., linux, windows, macos, ios, android, web)"
+    required: true
+  zipped:
+    description: "If true, the godot_project/addons directory will be zipped into addons.zip"
+    required: false
+    default: "false"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Generate godot-cpp hash
+      id: hash-cpp
+      shell: bash
+      run: |
+        echo "Computing hash for godot-cpp files..."
+
+    - name: Restore build cache
+      id: restore-cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          .scons-cache
+          godot-cpp
+        key: ${{ runner.os }}-scons-${{ inputs.build_platform }}-${{ hashFiles('godot-cpp/src/**/*.cpp', 'godot-cpp/gdextension/**/*', 'godot-cpp/include/**/*.hpp') }}
+        restore-keys: |
+          ${{ runner.os }}-scons-${{ inputs.build_platform }}-
+          ${{ runner.os }}-scons-
+
+    - name: Install Android build dependencies
+      if: inputs.build_platform == 'android'
+      shell: bash
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y openjdk-17-jdk
+        echo "JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64" >> $GITHUB_ENV
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        sudo mkdir -p /usr/local/lib/android/sdk
+        sudo unzip -q commandlinetools-linux-9477386_latest.zip -d /usr/local/lib/android/sdk
+        sudo chown -R $USER:$USER /usr/local/lib/android/sdk
+        export ANDROID_HOME=/usr/local/lib/android/sdk
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
+        echo "ANDROID_HOME=/usr/local/lib/android/sdk" >> $GITHUB_ENV
+        echo "PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin" >> $GITHUB_ENV
+        sudo mkdir -p /usr/local/lib/android/sdk/cmdline-tools/latest
+        sudo mv /usr/local/lib/android/sdk/cmdline-tools/* /usr/local/lib/android/sdk/cmdline-tools/latest/ || true
+        mkdir -p ~/.android
+        touch ~/.android/repositories.cfg
+        echo "y" | sdkmanager --licenses > /dev/null 2>&1
+        echo "y" | sdkmanager --install "platforms;android-33" "build-tools;33.0.2" "ndk;23.2.8568313" > /dev/null
+        echo "ANDROID_NDK_ROOT=/usr/local/lib/android/sdk/ndk/23.2.8568313" >> $GITHUB_ENV
+
+    - name: Install other build dependencies
+      shell: bash
+      run: |
+        if [[ "${{ runner.os }}" == "Linux" ]]; then
+          sudo apt-get update
+          sudo apt-get install -y scons g++ zip
+          if [[ "${{ inputs.build_platform }}" == "windows" ]]; then
+            sudo apt-get install -y mingw-w64
+          fi
+          if [[ "${{ inputs.build_platform }}" == "web" ]]; then
+            sudo apt-get install -y emscripten
+          fi
+        elif [[ "${{ runner.os }}" == "macOS" ]]; then
+          brew install scons
+          if [[ "${{ inputs.build_platform }}" == "ios" ]]; then
+            brew install ios-sim
+          fi
+        fi
+
+    - name: Run SCons build for ${{ inputs.build_platform }}
+      env:
+        SCONS_CACHE: .scons-cache
+      shell: bash
+      run: |
+        echo "Cache restore status: ${{ steps.restore-cache.outputs.cache-hit }}"
+        cd godot-cpp
+        scons platform=${{ inputs.build_platform }} --cache-show
+        cd ..
+        scons platform=${{ inputs.build_platform }} --cache-show
+        echo "Cache after build:"
+        ls -la .scons-cache
+
+    - name: Save cache
+      uses: actions/cache/save@v4
+      if: always()
+      with:
+        path: |
+          .scons-cache
+          godot-cpp
+        key: ${{ runner.os }}-scons-${{ inputs.build_platform }}-${{ hashFiles('godot-cpp/src/**/*.cpp', 'godot-cpp/gdextension/**/*', 'godot-cpp/include/**/*.hpp') }}
+
+    - name: Zip addons directory
+      if: ${{ inputs.zipped == 'true' }}
+      shell: bash
+      run: |
+        if [ -d "godot_project/addons" ]; then
+          zip -r addons.zip godot_project/addons
+        else
+          echo "Directory godot_project/addons not found."
+          exit 1
+        fi
