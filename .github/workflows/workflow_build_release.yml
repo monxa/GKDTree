@@ -69,9 +69,10 @@ jobs:
       - name: Create release archive
         run: |
           cd release
-          mkdir godot-ik-plugin
-          mv addons godot-ik-plugin/
-          zip -r ../godot-libik-plugin-${{ github.ref_name }}.zip godot-ik-plugin
+          mkdir gkdtree-plugin
+          mv addons gkdtree-plugin/
+
+          zip -r ../gkdtree-plugin-${{ github.ref_name }}.zip gkdtree-plugin
           
       - name: Create GitHub Release
         uses: actions/create-release@v1
@@ -91,6 +92,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./godot-libik-plugin-${{ github.ref_name }}.zip
-          asset_name: godot-libik-plugin-${{ github.ref_name }}.zip
+          asset_path: ./gkdtree-plugin-${{ github.ref_name }}.zip
+          asset_name: gkdtree-plugin-${{ github.ref_name }}.zip
           asset_content_type: application/zip
