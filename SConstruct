@@ -35,7 +35,7 @@ sources.append(doc_data)
 lib_output_path = f'godot_project/addons/gkdtree/bin/libgkdtree{env["SHLIBSUFFIX"]}'
 
 if env["platform"] in ["ios", "android"]:
-    lib_output_path = f'{LIB_BASE_PATH}.{env["platform"]}{env["SHLIBSUFFIX"]}'
+    lib_output_path = f'godot_project/addons/gkdtree/bin/libgkdtree.{env["platform"]}{env["SHLIBSUFFIX"]}'
 
 library = env.SharedLibrary(
         lib_output_path,
