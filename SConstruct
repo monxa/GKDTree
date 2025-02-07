@@ -32,18 +32,14 @@ sources = ["KDTree.cpp", "GKDTree.cpp", "GKDTree_binder.cpp"]
 doc_data = env.GodotCPPDocData("godot-cpp/src/gen/doc_data.gen.cpp", source=Glob("doc_classes/*.xml"))
 sources.append(doc_data)
 
-if env["platform"] == "macos":
-    library = env.SharedLibrary(
-        "libgkdtree.{}.{}.framework/libgkdtree.{}.{}".format(
-            env["platform"], env["target"], env["platform"], env["target"]
-        ),
-        source=sources,
-    )
-else:
-    library = env.SharedLibrary(
-        "godot_project/addons/gkdtree/bin/libgkdtree{}".format(env["SHLIBSUFFIX"]),
-        source=sources,
-    )
+lib_output_path = f'godot_project/addons/gkdtree/bin/libgkdtree{env["SHLIBSUFFIX"]}'
 
+if env["platform"] in ["ios", "android"]:
+    lib_output_path = f'{LIB_BASE_PATH}.{env["platform"]}{env["SHLIBSUFFIX"]}'
+
+library = env.SharedLibrary(
+        lib_output_path,
+        source=sources,
+)
 
 Default(library)
